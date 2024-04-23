@@ -65,4 +65,19 @@ public class PagamentoService {
         return ResponseEntity.ok(pagamentos);
     }
 
+    public ResponseEntity<?> excluirPagamento(Long id) {
+        Pagamento pagamento = pagamentoRepository.getById(id);
+
+        if (pagamento == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pagamento não encontrado com o ID fornecido.");
+        }
+
+        if (!"Pendente de Processamento".equals(pagamento.getStatus())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não é possível excluir um pagamento que não esteja com status Pendente de Processamento.");
+        }
+
+        pagamento.setStatus("Inativo");
+        pagamentoRepository.save(pagamento);
+        return ResponseEntity.ok("Pagamento excluído com sucesso.");
+    }
 }

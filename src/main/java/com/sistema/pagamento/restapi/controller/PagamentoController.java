@@ -35,4 +35,10 @@ public class PagamentoController {
         return pagamentoService.listarPagamentos(codigoDebito, cpfCnpjPagador, statusPagamento);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> excluirPagamento(@PathVariable Long id) {
+        return pagamentoService.excluirPagamento(id);
+    }
+
+
 }
