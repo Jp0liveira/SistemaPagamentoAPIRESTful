@@ -1,5 +1,6 @@
 package com.sistema.pagamento.restapi.validator;
 
+import com.sistema.pagamento.restapi.service.PagamentoService;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,10 +15,10 @@ public class PagamentoValidator {
     }
 
     public boolean isStatusValido(String statusAtual, String novoStatus) {
-        if ("Pendente de Processamento".equals(statusAtual)) {
-            return "Processado com Sucesso".equals(novoStatus) || "Processado com Falha".equals(novoStatus);
-        }else if ("Processado com Falha".equals(statusAtual)) {
-            return "Pendente de Processamento".equals(novoStatus);
+        if (PagamentoService.STATUS_PENDENTE.equals(statusAtual)) {
+            return PagamentoService.STATUS_SUCESSO.equals(novoStatus) ||  PagamentoService.STATUS_FALHA.equals(novoStatus);
+        }else if (PagamentoService.STATUS_FALHA.equals(statusAtual)) {
+            return PagamentoService.STATUS_PENDENTE.equals(novoStatus);
         }
         return false;
     }

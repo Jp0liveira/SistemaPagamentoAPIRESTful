@@ -15,7 +15,10 @@ import java.util.List;
 @Service
 public class PagamentoService {
     private final PagamentoRepository pagamentoRepository;
-    private static final String STATUS_PENDENTE = "Pendente de Processamento";
+    public static final String STATUS_PENDENTE = "Pendente de Processamento";
+    public static final String STATUS_SUCESSO = "Processado com Sucesso";
+    public static final String STATUS_FALHA = "Processado com Falha";
+    public static final String STATUS_INATIVO = "Inativo";
     private final PagamentoValidator pagamentoValidator;
 
     @Autowired
@@ -72,11 +75,11 @@ public class PagamentoService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pagamento não encontrado com o ID fornecido.");
         }
 
-        if (!"Pendente de Processamento".equals(pagamento.getStatus())) {
+        if (!STATUS_PENDENTE.equals(pagamento.getStatus())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não é possível excluir um pagamento que não esteja com status Pendente de Processamento.");
         }
 
-        pagamento.setStatus("Inativo");
+        pagamento.setStatus(STATUS_INATIVO);
         pagamentoRepository.save(pagamento);
         return ResponseEntity.ok("Pagamento excluído com sucesso.");
     }
