@@ -4,10 +4,12 @@ import com.sistema.pagamento.restapi.model.Pagamento;
 import com.sistema.pagamento.restapi.repository.PagamentoRepository;
 import com.sistema.pagamento.restapi.validator.PagamentoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -47,8 +49,20 @@ public class PagamentoService {
         return ResponseEntity.ok(pagamentoAtualizado);
     }
 
-    public List<Pagamento> listarPagamentos() {
-        return pagamentoRepository.findAll();
+    public ResponseEntity<?> listarPagamentos(Long codigoDebito, String cpfCnpjPagador, String statusPagamento) {
+        List<Pagamento> pagamentos;
+
+        if (codigoDebito != null || cpfCnpjPagador != null || statusPagamento != null) {
+            pagamentos =  pagamentoRepository.findByCodigoDebitoAndCpfCnpjPagadorAndStatus(codigoDebito, cpfCnpjPagador, statusPagamento);
+        } else {
+            pagamentos = pagamentoRepository.findAll();
+        }
+
+        if (pagamentos.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum pagamento encontrado com os filtros fornecidos.");
+        }
+
+        return ResponseEntity.ok(pagamentos);
     }
 
 }

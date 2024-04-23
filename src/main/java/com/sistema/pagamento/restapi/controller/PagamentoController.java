@@ -29,8 +29,10 @@ public class PagamentoController {
     }
 
     @GetMapping("/listar")
-    public List<Pagamento> listarPagamentos() {
-        return pagamentoService.listarPagamentos();
+    public ResponseEntity<?> listarPagamentos(@RequestParam(required = false, name = "codigoDebito") Long codigoDebito,
+                                              @RequestParam(required = false, name = "cpfCnpjPagador") String cpfCnpjPagador,
+                                              @RequestParam(required = false, name = "statusPagamento") String statusPagamento) {
+        return pagamentoService.listarPagamentos(codigoDebito, cpfCnpjPagador, statusPagamento);
     }
 
 }
