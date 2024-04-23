@@ -24,7 +24,7 @@ public class PagamentoController {
     }
 
     @PutMapping("/{id}/atualizar-status")
-    public Pagamento atualizarStatusPagamento(@PathVariable Long id, @RequestParam String novoStatus) {
+    public ResponseEntity<?> atualizarStatusPagamento(@PathVariable Long id, @RequestParam String novoStatus) {
         return pagamentoService.atualizarStatusPagamento(id, novoStatus);
     }
 
