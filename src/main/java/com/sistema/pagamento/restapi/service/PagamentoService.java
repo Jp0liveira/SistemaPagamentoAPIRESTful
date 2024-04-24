@@ -42,15 +42,19 @@ public class PagamentoService {
     }
 
     public ResponseEntity<?> atualizarStatusPagamento(Long id, String novoStatus) {
-        Pagamento pagamento = pagamentoRepository.getById(id);
-
-        if (!pagamentoValidator.isStatusValido(pagamento.getStatus(), novoStatus)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não é possível atualizar o status do pagamento para o novo status fornecido.");
-        }
-        pagamento.setStatus(novoStatus);
-        Pagamento pagamentoAtualizado = pagamentoRepository.save(pagamento);
-        return ResponseEntity.ok(pagamentoAtualizado);
+        return pagamentoRepository.findById(id)
+                .map(pagamento -> {
+                    if (!pagamentoValidator.isStatusValido(pagamento.getStatus(), novoStatus)) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não é possível atualizar o status do pagamento para o novo status fornecido.");
+                    }
+                    pagamento.setStatus(novoStatus);
+                    Pagamento pagamentoAtualizado = pagamentoRepository.save(pagamento);
+                    return ResponseEntity.ok(pagamentoAtualizado);
+                })
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pagamento não encontrado com o ID fornecido."));
     }
+
+
 
     public ResponseEntity<?> listarPagamentos(Long codigoDebito, String cpfCnpjPagador, String statusPagamento) {
         List<Pagamento> pagamentos;
@@ -69,18 +73,17 @@ public class PagamentoService {
     }
 
     public ResponseEntity<?> excluirPagamento(Long id) {
-        Pagamento pagamento = pagamentoRepository.getById(id);
+        return pagamentoRepository.findById(id)
+                .map(pagamento -> {
+                    if (!STATUS_PENDENTE.equals(pagamento.getStatus())) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não é possível excluir um pagamento que não esteja com status Pendente de Processamento.");
+                    }
+                    pagamento.setStatus(STATUS_INATIVO);
+                    pagamentoRepository.save(pagamento);
+                    return ResponseEntity.ok("Pagamento excluído com sucesso.");
+                })
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pagamento não encontrado com o ID fornecido."));
 
-        if (pagamento == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pagamento não encontrado com o ID fornecido.");
-        }
 
-        if (!STATUS_PENDENTE.equals(pagamento.getStatus())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não é possível excluir um pagamento que não esteja com status Pendente de Processamento.");
-        }
-
-        pagamento.setStatus(STATUS_INATIVO);
-        pagamentoRepository.save(pagamento);
-        return ResponseEntity.ok("Pagamento excluído com sucesso.");
     }
 }

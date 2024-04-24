@@ -23,8 +23,8 @@ public class PagamentoController {
         return pagamentoService.receberPagamento(pagamento);
     }
 
-    @PutMapping("/{id}/atualizar-status")
-    public ResponseEntity<?> atualizarStatusPagamento(@PathVariable Long id, @RequestParam String novoStatus) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> atualizarStatusPagamento(@PathVariable Long id, @RequestParam(name = "novoStatus") String novoStatus) {
         return pagamentoService.atualizarStatusPagamento(id, novoStatus);
     }
 
