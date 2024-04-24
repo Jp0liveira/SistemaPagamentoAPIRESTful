@@ -48,7 +48,7 @@ O aplicativo será executado localmente em [http://localhost:8080](http://localh
 - **URL:**  `/pagamentos/{id}`
 - **Método:** PUT
 - **Parâmetros de Query:** ID do pagamento e novo status do pagamento
-- - **Exemplo de Uso:**
+- **Exemplo de Uso:**
   `pagamentos/1?novoStatus=Processado com Sucesso`
 
 ![image](https://github.com/Jp0liveira/SistemaPagamentoAPIRESTful/assets/106454449/574f2bf5-a44a-4c2f-9fe5-d2f2ba69b920)
