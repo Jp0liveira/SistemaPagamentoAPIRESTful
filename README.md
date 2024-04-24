@@ -20,8 +20,8 @@ Este é um sistema de API RESTful desenvolvido em Spring Boot para lidar com pag
 ## Configuração e Execução
 
 1. Certifique-se de ter o JDK 17 e o Maven instalados em seu sistema.
-2. Clone este repositório: `git clone https://github.com/seu-usuario/sistema-pagamento-api.git`
-3. Navegue até o diretório do projeto: `cd sistema-pagamento-api`
+2. Clone este repositório: `git clone https://github.com/Jp0liveira/SistemaPagamentoAPIRESTful.git`
+3. Navegue até o diretório do projeto: `cd SistemaPagamentoAPIRESTfu`
 4. Execute o aplicativo: `mvn spring-boot:run`
 
 O aplicativo será executado localmente em [http://localhost:8080](http://localhost:8080).
